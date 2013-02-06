@@ -1,10 +1,10 @@
-splogger
+SPLogger
 ========
 
-Splunk Mobile Logging API
 
-The following notes related to the iOS (iPhone) version.
+[ The following notes related to the iOS (iPhone) version. ]
 
+# Splunk Mobile Logging API #
 
 # Release notes #
 
