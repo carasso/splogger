@@ -17,13 +17,13 @@ github. Currently the system logs to Splunk's cloud product, Storm
 (www.splunkstorm.com), but future versions can log to your own instances
 of Splunk.  To get the SPLogger API, download it via either method:
 
-  https://github.com/carasso/splogger/archive/master.zip
-  https://github.com/carasso/splogger.git
+*  https://github.com/carasso/splogger/archive/master.zip
+*  https://github.com/carasso/splogger.git
 
 The directory has two folders:
 
-1) lib --  the source code for the SPLogger API
-2) sample_app -- a small sample iPhone app that asks for a user's name
+1. lib --  the source code for the SPLogger API
+2. sample_app -- a small sample iPhone app that asks for a user's name
    and has a button that logs an event.
 
 
@@ -71,12 +71,12 @@ for testing.
 Your events in Splunk always have a few common properties: source,
 sourcetype, and host.  
 
-1) The "source" value will be the name of your application, and in the
+1. The "source" value will be the name of your application, and in the
    case of the sample_app will be "helloworld".
 
-2) The "sourcetype" value will always be "splogger".
+2. The "sourcetype" value will always be "splogger".
 
-3) The "host" value will be the concatenated MAC addresses of the
+3. The "host" value will be the concatenated MAC addresses of the
    mobile device's networks (e.g., "3c:07:54:79:a6:e2,
    68:a8:6d:4a:08:72, 0a:a8:6d:4a:08:72")
 
