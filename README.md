@@ -96,7 +96,7 @@ Show the top 5 hardware types:
 
      sourcetype=splogger | top 5 sys_machine, sys_model
 
-Of the users on level 5 of my game, what is the rate of success or failure (assumes I logged with an property called 'success'):
+Of the users on level 5 of my game, what is the rate of success or failure (assumes I logged with a property called 'success'):
 
      sourcetype=splogger level=5 | stats count by success:
 
