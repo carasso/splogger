@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="SPLogger : Splunk Mobile Logging API" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>SPLogger</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/carasso/splogger">View on GitHub</a>
+
+          <h1 id="project_title">SPLogger</h1>
+          <h2 id="project_tagline">Splunk Mobile Logging API</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/carasso/splogger/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/carasso/splogger/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>splogger</h1>
+
+<p>Splunk Mobile Logging API</p>
+
+<p>The following notes related to the iOS (iPhone) version.</p>
+
+<h1>Release notes</h1>
+
+<h1>Logging data on handheld devices</h1>
+
+<p>If you want to log events, such as track system or user behavior in
+your iOS application, start by downloading the SPLogger API from
+github. Currently the system logs to Splunk's cloud product, Storm
+(<a href="http://www.splunkstorm.com">www.splunkstorm.com</a>), but future versions can log to your own instances
+of Splunk.  To get the SPLogger API, download it via either method:</p>
+
+<ul>
+<li> <a href="https://github.com/carasso/splogger/archive/master.zip">https://github.com/carasso/splogger/archive/master.zip</a>
+</li>
+<li> <a href="https://github.com/carasso/splogger.git">https://github.com/carasso/splogger.git</a>
+</li>
+</ul><p>The directory has two folders:</p>
+
+<ol>
+<li>lib --  the source code for the SPLogger API</li>
+<li>sample_app -- a small sample iPhone app that asks for a user's name
+and has a button that logs an event.</li>
+</ol><h1>Initializing SPLogger</h1>
+
+<p>Before you do any logging to Splunk, you'll need to initialize the
+SPLogger object.  This initialization can be done in applicationDidFinishLaunching:
+of application:didFinishLaunchingWithOptions in your Application delegate.  In the
+sample_app, we this in done in viewDidLoad() in DCViewController.m, with the 
+following code:</p>
+
+<pre><code>[SPLogger                init:@"storm" 
+                    authToken:@"IL8Yx-JNKYak6oyTBuGX1vCfyAU7TsU6svfwnzQVTHw5gfRysmbV0l1UUNkIk33g9aWZ_tJUBIN="
+                    projectID:@"4ce5c2e7bfb211e0b75b12313b9c248a"
+       uploadIntervalInEvents:2 
+         uploadIntervalInSecs:5 
+          shouldLogSystemData:YES 
+        shouldLogSystemEvents:NO 
+       shouldLogSynchronously:YES];
+</code></pre>
+
+<p>The included authToken and projectID are invalid and you'll need to get your own proper values at splunkstorm.com.</p>
+
+<h1>Logging Events</h1>
+
+<p>After initializing the SPLogger object, you are ready to log events. To log simple strings, try examples such as:</p>
+
+<pre><code>[SPLogger track: @"My Message"];
+[SPLogger track: [[NSString alloc] initWithFormat: @"USER %@ PUSHED BUTTON", nameString]];
+</code></pre>
+
+<p>If you want to add properties to the event or specify an alternative timestamp, try:</p>
+
+<ul>
+<li>(void) track:(NSString*) event properties:(NSDictionary*) properties;</li>
+<li>(void) track:(NSString*) event properties:(NSDictionary*) properties timestamp: (NSNumber*) timestamp ;</li>
+</ul><h1>Using Storm for Analytics</h1>
+
+<p>All your events are uploaded to splunkstorm.com on a regular interval,
+depending on how your initialzed SPLogger.  In the above code, events
+are uploaded every 5 seconds, which is rather aggressive but useful
+for testing.</p>
+
+<p>Your events in Splunk always have a few common properties: source,
+sourcetype, and host.  </p>
+
+<ol>
+<li><p>The "source" value will be the name of your application, and in the
+case of the sample_app will be "helloworld".</p></li>
+<li><p>The "sourcetype" value will always be "splogger".</p></li>
+<li><p>The "host" value will be the concatenated MAC addresses of the
+mobile device's networks (e.g., "3c:07:54:79:a6:e2,
+68:a8:6d:4a:08:72, 0a:a8:6d:4a:08:72")</p></li>
+</ol><p>The SPLogger initializer API has the option (set to YES above) to log
+system data, and if YES, will add additional system properties to your
+events, such as sys_machine="x86_64" sys_model="MacBookPro8,1".</p>
+
+<p>This is not the place to learn Splunk Search Processing Language
+(SPL), but the following example searches will give you a basic idea
+of some of the power available with easy:</p>
+
+<p>Show the top 10 users of my apps:  </p>
+
+<pre><code> sourcetype=splogger | top 10 host
+</code></pre>
+
+<p>Show the top 5 hardware types:</p>
+
+<pre><code> sourcetype=splogger | top 5 sys_machine, sys_model
+</code></pre>
+
+<p>Of the users on level 5 of my game, what is the rate of success or failure (assumes I logged with an property called 'success'):</p>
+
+<pre><code> sourcetype=splogger level=5 | stats count by success:
+</code></pre>
+
+<p>Show a chart of usage by time, broken up by each of my apps:</p>
+
+<pre><code> sourcetype=splogger | timechart count by source
+</code></pre>
+
+<p>How long do users typical use my apps, assuming a 5 minute pause means the user is done</p>
+
+<pre><code> sourcetype=splogger | transaction host maxpause=5m | stats min(duration), max(duration), avg(duration)
+</code></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">SPLogger maintained by <a href="https://github.com/carasso">carasso</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
