@@ -14,9 +14,11 @@ The following notes related to the iOS (iPhone) version.
 If you want to log events, such as track system or user behavior in
 your iOS application, start by downloading the SPLogger API from
 github. Currently the system logs to Splunk's cloud product, Storm
-(www.splunkstorm.com). 
+(www.splunkstorm.com), but future versions can log to your own instances
+of Splunk.  To get the SPLogger API, download it via either method:
 
-   ## TODO: instructions on downloading
+  https://github.com/carasso/splogger/archive/master.zip
+  https://github.com/carasso/splogger.git
 
 The directory has two folders:
 
