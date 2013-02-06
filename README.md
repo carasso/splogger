@@ -86,7 +86,7 @@ events, such as sys_machine="x86_64" sys_model="MacBookPro8,1".
 
 This is not the place to learn Splunk Search Processing Language
 (SPL), but the following example searches will give you a basic idea
-of some of the power available with easy:
+of some of the power:
 
 Show the top 10 users of my apps:  
 
