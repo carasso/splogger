@@ -57,8 +57,8 @@ After initializing the SPLogger object, you are ready to log events. To log simp
 
 If you want to add properties to the event or specify an alternative timestamp, try:
 
-   + (void) track:(NSString*) event properties:(NSDictionary*) properties;
-   + (void) track:(NSString*) event properties:(NSDictionary*) properties timestamp: (NSNumber*) timestamp ;
+    + (void) track:(NSString*) event properties:(NSDictionary*) properties;
+    + (void) track:(NSString*) event properties:(NSDictionary*) properties timestamp: (NSNumber*) timestamp ;
 
 
 # Using Storm for Analytics
