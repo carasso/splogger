@@ -62,7 +62,8 @@
     // SET UP REQUEST HEADER 
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString: self.url]];
     [request setValue:authValue forHTTPHeaderField:@"Authorization"];
-    [request setValue:@"gzip"   forHTTPHeaderField:@"Accept-Encoding"];
+    // TODO: uncomment below line when data is actually gzipped.  currently not gzipped    
+    //[request setValue:@"gzip"   forHTTPHeaderField:@"Content-Encoding"];
     //[request setValue:@"text/plain; charset=UTF-8" forHTTPHeaderField:@"Content-Encoding"]; //!!!???LOOKUP
     [request setHTTPMethod:@"POST"];
     
