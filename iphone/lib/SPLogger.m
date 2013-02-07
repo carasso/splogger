@@ -288,10 +288,13 @@ shouldLogSynchronously:     (BOOL) synchronous
 }
 
 - (void)flushEvents 
-{
-    if (eventQueue.count == 0)
-        return;
-    [writer flushEvents: eventQueue];
+{    
+    @synchronized(self.eventQueue) {
+        if (eventQueue.count == 0)
+            return;
+#warning TODO: consider making a new eventQueue object so track() does not have to wait for this flush            
+        [writer flushEvents: eventQueue];
+    }
 }
 
 - (void)stop 
