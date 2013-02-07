@@ -195,21 +195,22 @@ shouldLogSynchronously:     (BOOL) synchronous
     // output for debugging
     NSLog(@"%@", splEvent);
     
-    // we keep at most N events.  if we have too many in memory or on disk, it means
-    // we haven't been able to connect for a long time.  keep only the N most recent events.
-    if (self.eventQueue.count > MAX_EVENTS_TO_RETAIN) {
-        int countToDelete = self.eventQueue.count - MAX_EVENTS_TO_RETAIN;
-        if (self.logSysEvents) {
-            NSString *event = [NSString stringWithFormat:
-                              @"SYSTEM_NOTICE: Unable to flush events for too long.  Deleting oldest %d events.", 
-                              countToDelete];
-            SPLoggerEvent *splEvent = [[SPLoggerEvent alloc] init:event properties: nil timestamp: timestamp];
-            [[self eventQueue] addObject:splEvent];
+    @synchronized(self.eventQueue) {
+        // we keep at most N events.  if we have too many in memory or on disk, it means
+        // we haven't been able to connect for a long time.  keep only the N most recent events.
+        if (self.eventQueue.count > MAX_EVENTS_TO_RETAIN) {
+            int countToDelete = self.eventQueue.count - MAX_EVENTS_TO_RETAIN;
+            if (self.logSysEvents) {
+                NSString *event = [NSString stringWithFormat:
+                                  @"SYSTEM_NOTICE: Unable to flush events for too long.  Deleting oldest %d events.", 
+                                  countToDelete];
+                SPLoggerEvent *splEvent = [[SPLoggerEvent alloc] init:event properties: nil timestamp: timestamp];
+                [[self eventQueue] addObject:splEvent];
+            }
+            [self.eventQueue removeObjectsInRange:NSMakeRange(0, countToDelete)];
         }
-        [self.eventQueue removeObjectsInRange:NSMakeRange(0, countToDelete)];
     }
 }
-
 
 // setup NSTimer to call flushEvents() every N seconds
 
