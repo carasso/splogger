@@ -191,11 +191,11 @@ shouldLogSynchronously:     (BOOL) synchronous
     }
     
     SPLoggerEvent *splEvent = [[SPLoggerEvent alloc] init:event properties: props timestamp: timestamp];
-    [[self eventQueue] addObject:splEvent];
     // output for debugging
     NSLog(@"%@", splEvent);
     
     @synchronized(self.eventQueue) {
+        [[self eventQueue] addObject:splEvent];
         // we keep at most N events.  if we have too many in memory or on disk, it means
         // we haven't been able to connect for a long time.  keep only the N most recent events.
         if (self.eventQueue.count > MAX_EVENTS_TO_RETAIN) {
