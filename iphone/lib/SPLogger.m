@@ -223,6 +223,8 @@ shouldLogSynchronously:     (BOOL) synchronous
     [self flushEvents];
     
     timer = [NSTimer scheduledTimerWithTimeInterval:uploadIntervalInSecs target:self  selector:@selector(flushEvents) userInfo:nil repeats:YES];
+    // prevents the ui from making the timer be laggy.
+    [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
 }
 
 
