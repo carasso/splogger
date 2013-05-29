@@ -18,6 +18,7 @@
 #include <netinet/in.h>
 #include <ifaddrs.h>
 #include <net/if_dl.h>
+#import <UIKit/UIKit.h> 
 
 #if ! defined(IFT_ETHER)
 #define IFT_ETHER 0x6/* Ethernet CSMACD. Ethernet I or II */
